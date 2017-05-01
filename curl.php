@@ -1,6 +1,6 @@
 <?php
-//La page qu'on veut utiliser
-$wikipediaURL = 'https://fr.wikipedia.org/wiki/Spécial:Page_au_hasard';
+//URL for a random article
+$wikipediaRandURL = 'https://fr.wikipedia.org/wiki/Spécial:Page_au_hasard';
 
 function HandleHeaderLine( $curl, $header_line ) {
     echo "<br>YEAH: ".$header_line; // or do whatever
@@ -8,43 +8,67 @@ function HandleHeaderLine( $curl, $header_line ) {
 }
 
 function GetWikipage($url){
-//On initialise cURL
-$ch = curl_init();
-//On lui transmet la variable qui contient l'URL
-curl_setopt($ch, CURLOPT_URL, $url);
-//On lui demdande de nous retourner la page
-curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
-//On envoie un user-agent pour ne pas être considéré comme un bot malicieux
-curl_setopt($ch, CURLOPT_USERAGENT, 'Nous ne sommes pas malicieux');
-//Ne pas vérifier le certificat
-curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
-//On récupère l'en-tête
-curl_setopt($ch, CURLOPT_HEADER, false);
-//curl_setopt($ch, CURLOPT_HEADERFUNCTION, "HandleHeaderLine");
-//On exécute notre requête et met le résultat dans une variable
-$resultat = curl_exec($ch);
-//On ferme la connexion cURL
-curl_close($ch);
-//On retourne la variable
-return $resultat;
+    //Init cURL
+    $ch = curl_init();
+    //Set URL
+    curl_setopt($ch, CURLOPT_URL, $url);
+    //Return page
+    curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+    //Send User-agent
+    curl_setopt($ch, CURLOPT_USERAGENT, 'Nous ne sommes pas malicieux');
+    //Do not verify certificate
+    curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+    //Get header
+    curl_setopt($ch, CURLOPT_HEADER, false);
+    //curl_setopt($ch, CURLOPT_HEADERFUNCTION, "HandleHeaderLine");
+    //Execute request and stock the result into a variable
+    $resultat = curl_exec($ch);
+    //Close cURL connection
+    curl_close($ch);
+    //Return variable
+    return $resultat;
+}
+
+function GetWikiHeader($url){
+    //Init cURL
+    $ch = curl_init();
+    //Set URL
+    curl_setopt($ch, CURLOPT_URL, $url);
+    //Return page
+    curl_setopt($ch, CURLOPT_RETURNTRANSFER, 0);
+    curl_setopt($ch, CURLOPT_NOBODY, 1);
+    //Send User-agent
+    curl_setopt($ch, CURLOPT_USERAGENT, 'Nous ne sommes pas malicieux');
+    //Do not verify certificate
+    curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+    //Get header
+    curl_setopt($ch, CURLOPT_HEADER, true);
+    //curl_setopt($ch, CURLOPT_HEADERFUNCTION, "HandleHeaderLine");
+    //Execute request and stock the result into a variable
+    $resultat = curl_exec($ch);
+    //Close cURL connection
+    curl_close($ch);
+    //Return variable
+    return $resultat;
 }
 
 
 
 function GetArticle($page){
-    //On crée un nouveau document DOMDocument
+    //Create new DOMDocument
     $wikipediaPage = new DOMDocument();
-    //On y charge le contenu qu'on a récupéré avec cURL
+    //Load cURL content
     $wikipediaPage->loadHTML($page);
-    //$wikipediaPage->saveHTML();
+    //Get the bodyContent block (article)
     $article = $wikipediaPage->GetElementById('bodyContent');
+    //Get inner HTML
     $children = $article->childNodes;
     foreach ($children as $child) {
         $tmp_doc = new DOMDocument();
         $tmp_doc->appendChild($tmp_doc->importNode($child,true));       
         $innerHTML .= $tmp_doc->saveHTML();
     } 
-    echo $innerHTML;
+    return $innerHTML;
 }
 
 function GetPageHeader($url){

@@ -5,20 +5,36 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title> Wikigame </title>
+    <meta charset="utf-8"/>
+    <title> PARCE QUE C'EST NOTRE PROJET </title>
+    <link rel="stylesheet" type="text/css" href="projet_informatique.css"/>
 </head>
+
 <body>
-    <h1>OKAY IT'S DONE NOW KOFEE TIME !!!</h1>
-    <?php
-        //$page = GetWikipage($wikipediaURL);
-        //$head = GetPageHeader($wikipdiaURL);
-        $testpage = GetWikiPage('https://fr.wikipedia.org/wiki/CURL');
-        GetArticle($testpage);
-        //echo $page;
-    ?>
-    <!--<iframe src="https://fr.wikipedia.org/wiki/CURL" width="100%" height="800%" frameborder="0" scrolling="yes"></iframe>-->
-    <div>
-        
+    <div class="container">
+        <div class="header item"> ♥ PARCE QUE C'EST NOTRE PROJET ♥ </div>
+        <div class="contentBody">
+            <div class="menuLeft item contentLeft">
+                <!-- TODO : Add left items -->
+            </div>
+
+            <div class="content item contentRight">
+                <br/>
+                Ce projet est jeune et dynamique ! ♥
+                <img id="macron" src="https://image.noelshack.com/fichiers/2017/02/1484399870-macron.png" />
+                <?php
+                    //$page = GetWikipage($wikipediaURL);
+                    //$head = GetPageHeader($wikipdiaURL);
+                    $testpage = GetWikiPage('https://fr.wikipedia.org/wiki/CURL');
+                    echo GetArticle($testpage);
+                    //echo GetWikiHeader('https://fr.wikipedia.org/wiki/CURL');
+                ?>
+            </div>
+            <div class="clearb"></div>
+        </div>
+
+        <div class="footer item"> HIHIHIIHIHIHI ♥
+        </div>
     </div>
 </body>
 </html>
