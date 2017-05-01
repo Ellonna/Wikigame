@@ -58,7 +58,9 @@ function GetArticle($page){
     //Create new DOMDocument
     $wikipediaPage = new DOMDocument();
     //Load cURL content
+    libxml_use_internal_errors(true);
     $wikipediaPage->loadHTML($page);
+    libxml_clear_errors();
     //Get the bodyContent block (article)
     $article = $wikipediaPage->GetElementById('bodyContent');
     //Get inner HTML
@@ -66,6 +68,7 @@ function GetArticle($page){
     foreach ($children as $child) {
         $tmp_doc = new DOMDocument();
         $tmp_doc->appendChild($tmp_doc->importNode($child,true));       
+        $innerHTML = '';
         $innerHTML .= $tmp_doc->saveHTML();
     } 
     return $innerHTML;
