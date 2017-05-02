@@ -7,6 +7,7 @@
     <meta charset="utf-8"/>
     <title> PARCE QUE C'EST NOTRE PROJET </title>
     <link rel="stylesheet" type="text/css" href="projet_informatique.css"/>
+    <!--<link rel="stylesheet" type="text/css" href="wiki_style.css"/>-->
 </head>
 
 <body>
