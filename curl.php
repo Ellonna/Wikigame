@@ -19,7 +19,7 @@ function GetWikipage($url){
     //Set URL
     curl_setopt($ch, CURLOPT_URL, $url);
     //Return page
-    curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+    curl_setopt($ch, CURLOPT_RETURNTRANSFER, 0);
     //Send User-agent
     curl_setopt($ch, CURLOPT_USERAGENT, 'Nous ne sommes pas malicieux');
     //Do not verify certificate
@@ -117,5 +117,6 @@ function GetArticle($page){
         $innerHTML = '';
         $innerHTML .= $tmp_doc->saveHTML();
     } 
-    return $innerHTML;
+    echo $innerHTML;
+    //return $innerHTML;
 }

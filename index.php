@@ -21,13 +21,14 @@
             <div class="content item contentRight">
                 <br/>
                 Ce projet est jeune et dynamique ! ♥
+                </br>
                 <img id="macron" src="https://image.noelshack.com/fichiers/2017/02/1484399870-macron.png" />
                 <?php
                     //$page = GetWikipage($wikipediaURL);
                     //$head = GetPageHeader($wikipdiaURL);
                     $testpage = GetWikiPage('https://fr.wikipedia.org/wiki/CURL');
-                    echo GetArticle($testpage);
-                    GetWikiHeader('$wikipediaRandURL');
+                    GetArticle($testpage);
+                    //GetWikiHeader('$wikipediaRandURL');
                     //echo bite;
                 ?>
             </div>
