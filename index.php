@@ -27,7 +27,8 @@
                     //$head = GetPageHeader($wikipdiaURL);
                     $testpage = GetWikiPage('https://fr.wikipedia.org/wiki/CURL');
                     echo GetArticle($testpage);
-                    //echo GetWikiHeader('https://fr.wikipedia.org/wiki/CURL');
+                    GetWikiHeader('$wikipediaRandURL');
+                    //echo bite;
                 ?>
             </div>
             <div class="clearb"></div>

@@ -2,11 +2,17 @@
 //URL for a random article
 $wikipediaRandURL = 'https://fr.wikipedia.org/wiki/Spécial:Page_au_hasard';
 
+//(NOT FINISHED) Header treatment.
 function HandleHeaderLine( $curl, $header_line ) {
     echo "<br>YEAH: ".$header_line; // or do whatever
     return strlen($header_line);
 }
 
+/****************************/
+/*      cURL Functions      */
+/****************************/
+
+//cURL request to get the Wiki page content. Parameter : url adress.
 function GetWikipage($url){
     //Init cURL
     $ch = curl_init();
@@ -29,6 +35,7 @@ function GetWikipage($url){
     return $resultat;
 }
 
+//cURL request to get the Wiki page header only. Parameter : url adress.
 function GetWikiHeader($url){
     //Init cURL
     $ch = curl_init();
@@ -50,6 +57,7 @@ function GetWikiHeader($url){
     //Close cURL connection
     curl_close($ch);
     //Return variable
+    return $headers;
     //list($headers, $response) = explode("\r\n\r\n", $resultat, 2);
     // $headers now has a string of the HTTP headers
     // $response is the body of the HTTP response
@@ -62,29 +70,36 @@ function GetWikiHeader($url){
         }
     }
     return $resultat;*/
-    function get_headers_from_curl_response($response)
-    {
+}
+
+/****************************/
+/*  cURL result treatment   */
+/****************************/
+
+//Get information from header. Parameter : cURL header.
+function get_headers_from_curl_response($response){
     $headers = array();
 
     $header_text = substr($response, 0, strpos($response, "\r\n\r\n"));
 
-    foreach (explode("\r\n", $header_text) as $i => $line)
-        if ($i === 0)
+    foreach (explode("\r\n", $header_text) as $i => $line){
+        if ($i === 0){
             $headers['http_code'] = $line;
-        else
-        {
+        }
+        else{
             list ($key, $value) = explode(': ', $line);
 
             $headers[$key] = $value;
         }
 
-    return $headers;
+        return $headers;
     }
     $headersTab = get_headers_from_curl_response($headers);
     var_dump($headersTab);
     return $headersTab;
 }
 
+//Get inner HTML of Wiki article. Parameter : cURL result page.
 function GetArticle($page){
     //Create new DOMDocument
     $wikipediaPage = new DOMDocument();
