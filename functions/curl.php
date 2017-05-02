@@ -72,6 +72,11 @@ function GetWikiHeader($url){
     return $resultat;*/
 }
 
+function GetRandURL($WikipediaRandURL){
+
+}
+
+
 /****************************/
 /*  cURL result treatment   */
 /****************************/
@@ -113,10 +118,10 @@ function GetArticle($page){
     $children = $article->childNodes;
     foreach ($children as $child) {
         $tmp_doc = new DOMDocument();
-        $tmp_doc->appendChild($tmp_doc->importNode($child,true));       
+        $tmp_doc->appendChild($tmp_doc->importNode($child,true));
         $innerHTML = '';
         $innerHTML .= $tmp_doc->saveHTML();
-    } 
+    }
     echo $innerHTML;
     //return $innerHTML;
 }
