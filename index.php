@@ -1,10 +1,6 @@
 <?php
-<<<<<<< HEAD
-    require 'curl.php';
-=======
     session_start();
     require 'functions/curl.php';
->>>>>>> origin/master
 ?>
 <?php
     require 'view/head.php';
