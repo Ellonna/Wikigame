@@ -1,6 +1,7 @@
 <?php
     session_start();
     require 'functions/curl.php';
+    require 'functions/side_function.php';
     $GameState = 1;
 ?>
 <?php
