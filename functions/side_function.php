@@ -1,7 +1,6 @@
 <?php
 function chrono (){
-
-    if (  !isset($_SESSION['starttime'])) {
+    if (!isset($_SESSION['starttime'])) {
         $_SESSION['starttime'] = new DateTime();
         $_SESSION['currtime'] = new DateTime() ;
         $_SESSION['delta'] = 0;
@@ -18,13 +17,13 @@ function chrono (){
 }
 
 function display_chrono (){
-     $time = chrono();
-        $chrono = '';
-        for ($i = 0; $i < 3; $i++){
-            $chrono .= $time[$i];
-            if ($i < 2){
-                $chrono .= ':';
-            }
+    $time = chrono();
+    $chrono = '';
+    for ($i = 0; $i < 3; $i++){
+        $chrono .= $time[$i];
+        if ($i < 2){
+            $chrono .= ':';
         }
-        echo $chrono;
+    }
+    echo $chrono;
 }
