@@ -1,6 +1,6 @@
 <?php
 //URL for a random article
-$wikipediaRandURL = 'https://fr.wikipedia.org/wiki/Spécial:Page_au_hasard';
+$RandURL = 'https://fr.wikipedia.org/wiki/Spécial:Page_au_hasard';
 
 //(NOT FINISHED) Header treatment.
 function HandleHeaderLine( $curl, $header_line ) {
@@ -72,8 +72,19 @@ function GetWikiHeader($url){
     return $resultat;*/
 }
 
-function GetRandURL($WikipediaRandURL){
+function GetRandURL(){
+    $RandURL = 'https://fr.wikipedia.org/wiki/Spécial:Page_au_hasard';
+    //Init cURL
+    $ch = curl_init();
+    //cURL options
+    curl_setopt($ch, CURLOPT_URL, $RandURL);
+    curl_setopt($ch, CURLOPT_HEADER, 1);
+    curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+    curl_setopt($ch, CURLOPT_NOBODY, 1);
+    curl_exec($ch);
 
+    $url = curl_getinfo($ch, CURLINFO_REDIRECTED_URL);
+    return $url;
 }
 
 
