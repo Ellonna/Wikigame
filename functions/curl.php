@@ -1,13 +1,4 @@
 <?php
-//URL for a random article
-$RandURL = 'https://fr.wikipedia.org/wiki/Spécial:Page_au_hasard';
-
-//(NOT FINISHED) Header treatment.
-function HandleHeaderLine( $curl, $header_line ) {
-    echo "<br>YEAH: ".$header_line; // or do whatever
-    return strlen($header_line);
-}
-
 /****************************/
 /*      cURL Functions      */
 /****************************/
@@ -19,14 +10,11 @@ function GetWikipage($url){
     //Set URL
     curl_setopt($ch, CURLOPT_URL, $url);
     //Return page
-    curl_setopt($ch, CURLOPT_RETURNTRANSFER, 0);
-    //Send User-agent
-    curl_setopt($ch, CURLOPT_USERAGENT, 'Nous ne sommes pas malicieux');
+    curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
     //Do not verify certificate
     curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
     //Get header
     curl_setopt($ch, CURLOPT_HEADER, false);
-    //curl_setopt($ch, CURLOPT_HEADERFUNCTION, "HandleHeaderLine");
     //Execute request and stock the result into a variable
     $resultat = curl_exec($ch);
     //Close cURL connection
@@ -35,43 +23,7 @@ function GetWikipage($url){
     return $resultat;
 }
 
-//cURL request to get the Wiki page header only. Parameter : url adress.
-function GetWikiHeader($url){
-    //Init cURL
-    $ch = curl_init();
-    //Set URL
-    curl_setopt($ch, CURLOPT_URL, $url);
-    //Return page
-    curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
-    curl_setopt($ch, CURLOPT_NOBODY, 1);
-    //Send User-agent
-    curl_setopt($ch, CURLOPT_USERAGENT, 'Nous ne sommes pas malicieux');
-    //Do not verify certificate
-    curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
-    //Get header
-    //curl_setopt($ch, CURLOPT_HEADER, true);
-    curl_setopt($ch, CURLOPT_HEADERFUNCTION, "HandleHeaderLine");
-    //Execute request and stock the result into a variable
-    $headers = curl_exec($ch);
-    var_dump($headers);
-    //Close cURL connection
-    curl_close($ch);
-    //Return variable
-    return $headers;
-    //list($headers, $response) = explode("\r\n\r\n", $resultat, 2);
-    // $headers now has a string of the HTTP headers
-    // $response is the body of the HTTP response
-
-    /*$headers = explode("\n", $headers);
-    var_dump ($headers);
-    foreach($headers as $header) {
-        if (stripos($header, 'Location:') !== false) {
-            echo "The location header is: '$header'";
-        }
-    }
-    return $resultat;*/
-}
-
+//Return a link to a random Wikipedia article
 function GetRandURL(){
     $RandURL = 'https://fr.wikipedia.org/wiki/Spécial:Page_au_hasard';
     //Init cURL
@@ -82,59 +34,47 @@ function GetRandURL(){
     curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
     curl_setopt($ch, CURLOPT_NOBODY, 1);
     curl_exec($ch);
-
-    $url = curl_getinfo($ch, CURLINFO_REDIRECTED_URL);
+    //Get and return the URL in the header
+    $url = curl_getinfo($ch, CURLINFO_REDIRECT_URL);
     return $url;
 }
 
+function NewPage($url){
+            $pagemodif;
+            $curl=curl_init($url);//initialisation de la session url
+            curl_setopt($curl, CURLOPT_FRESH_CONNECT, true);
+            if (preg_match('`^https://`i', $url))// Ne pas vérifier la validité du certificat SSL
+            {
+                curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, false);
+                curl_setopt($curl, CURLOPT_SSL_VERIFYHOST, 0);
+            }
+            curl_setopt($curl, CURLOPT_FOLLOWLOCATION, true);
+            curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
+
+            $return = curl_exec($curl);
+            curl_close($curl);
+            $pagemodif = strstr ( $return , "<h1 id=\"firstHeading\" class=\"firstHeading\"");
+            $pagemodif = strstr ( $pagemodif , "<div class=\"printfooter\">",true);
+            $pagemodif = $pagemodif.'</div>';
+
+            // Ici nous allons transformer les liens que l'on garde en balise inutile pour ensuite supprimer tout les autres liens
+            // a la fois externes et interne inutile (modifier le code / aide / etc...) puis les remettre de sorte a pouvoir les utiliser
+            $pagemodif = preg_replace('#<a .*?href="/wiki/([^:]*?)".*?>(.*?)</a>#','<evitercasse$1evitercasse$2evitercasse>',$pagemodif);
+            $pagemodif = preg_replace( '#<a [^>]*>(.*?)</a>#','<span class="ancienlien">$1</span>',$pagemodif );
+            $pagemodif = preg_replace('#<evitercasse(.*?)evitercasse(.*?)evitercasse>#','<a href="jeu.php?acces=$1">$2</a>',$pagemodif);
+
+            $pagemodif = preg_replace( '#<span class="mw-editsection">.+<span class="mw-editsection-bracket">]</span></span>#'," ",$pagemodif );
+            return $pagemodif;
+        }
 
 /****************************/
 /*  cURL result treatment   */
 /****************************/
-
-//Get information from header. Parameter : cURL header.
-function get_headers_from_curl_response($response){
-    $headers = array();
-
-    $header_text = substr($response, 0, strpos($response, "\r\n\r\n"));
-
-    foreach (explode("\r\n", $header_text) as $i => $line){
-        if ($i === 0){
-            $headers['http_code'] = $line;
-        }
-        else{
-            list ($key, $value) = explode(': ', $line);
-
-            $headers[$key] = $value;
-        }
-
-        return $headers;
-    }
-    $headersTab = get_headers_from_curl_response($headers);
-    var_dump($headersTab);
-    return $headersTab;
-}
-
-//Get inner HTML of Wiki article. Parameter : cURL result page.
-function GetArticle($page){
-    //Create new DOMDocument
-    $wikipediaPage = new DOMDocument();
-    //Load cURL content
+function GetArticle($page) {
+    $dom = new DOMDocument();
     libxml_use_internal_errors(true);
-    $wikipediaPage->loadHTML($page);
+    $dom->loadHTML($page);
     libxml_clear_errors();
-    //Get the bodyContent block (article)
-    $article = $wikipediaPage->GetElementById('bodyContent');
-    //Get inner HTML
-    $children = $article->childNodes;
-    foreach ($children as $child) {
-        $tmp_doc = new DOMDocument();
-        $tmp_doc->appendChild($tmp_doc->importNode($child,true));
-        $innerHTML = '';
-        $innerHTML .= $tmp_doc->saveHTML();
-    }
-    echo $innerHTML;
-    //return $innerHTML;
 }
 
 function clear_article($str){
