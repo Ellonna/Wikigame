@@ -84,3 +84,12 @@ $str = substr($str,strpos($str,"<div_id=\"mw-content-text"),$len);
     $str=preg_replace("/<a(.*?)href=\"\/wiki\/(.*?)\"(.*?)>(.*?)<\/a>/","<a_$1_href=\"game.php?article=$2\"$3>$4</a>",$str);
     return $str;
 }
+
+function clear_tittle(){
+    //on efface le début du lien pour ne garder que le titre de l'article
+    $result = preg_replace("/https:\/\/fr.wikipedia.ord\/wiki\//","",$result);
+    //On remplace les %2C ect par les bons caracteres
+    $result=preg_replace("/_/","_",$result);
+
+    return $result;//On rencoie le titre
+}
