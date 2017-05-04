@@ -11,7 +11,7 @@
         $_SESSION['delta']= $_SESSION['starttime']-> diff (new DateTime());
         $_SESSION['delta2']= $_SESSION['lasttime']-> diff (new DateTime());
     $second = $_SESSION['delta']->s;
-    $min = $_SESSION['delta']->i;
+    $min = $_SESSION['delta']->m;
     $heure = $_SESSION['delta']->h;
     $_SESSION['temps'] = $heure*3600 + $min*60 + $second;
 

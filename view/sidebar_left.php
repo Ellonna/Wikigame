@@ -5,5 +5,4 @@
             require 'view/chrono.php';
         }
     ?>
-
 </div>
