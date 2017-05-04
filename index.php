@@ -13,6 +13,7 @@
                 $StartPage = GetRandURL();
                 $EndPage = GetRandUrl();
                 echo $StartPage, '</br>', $EndPage;
+                require 'view/StartPage.php';
                 break;
             case 1:
                 require 'view/article.php';
