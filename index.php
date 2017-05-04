@@ -18,9 +18,6 @@
         <?php
         switch($_SESSION['GameState']){
             case 0:
-                $URLpourtester = 'https://fr.wikipedia.org/wiki/Wikip%C3%A9dia';
-                $titre = clear_title($URLpourtester);
-                echo 'Je suis le echo' . $titre;
                 require 'view/StartPage.php';
                 break;
             case 1:
