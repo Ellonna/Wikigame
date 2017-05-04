@@ -25,7 +25,6 @@
         $_SESSION['Pathway'] = array();
     }
     array_push($_SESSION['Pathway'],$_SESSION['CurrentPage']);
-
 ?>
     <div class="content item contentRight">
         <?php

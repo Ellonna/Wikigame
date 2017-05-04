@@ -1,4 +1,8 @@
-<?php session_start(); ?>
+<?php
+if( ! $_SESSION) {
+    session_start();
+}
+?>
 <br/>
 Ce projet est jeune et dynamique ! ♥
 </br>

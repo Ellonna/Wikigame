@@ -1,4 +1,8 @@
-<?php session_start(); ?>
+<?php
+if( ! $_SESSION){
+    session_start();
+}
+?>
 <div class="menuLeft item contentLeft">
     <?php
         if($_SESSION['GameState'] == 1){
