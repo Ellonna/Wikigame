@@ -17,7 +17,22 @@
 .menuLeft{
   border:solid 2px black;
   background-color: white;
+  display : flex;
+  flex-direction:row;
+
 }
+     #min{
+            display : flex;
+        }
+        #sec{
+            display : flex;
+        }
+        #m{
+            display : flex;
+        }
+        #s{
+            display : flex;
+        }
 
 .content{
  border:solid 2px black;
