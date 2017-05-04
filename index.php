@@ -4,8 +4,7 @@
     }
     require 'functions/curl.php';
     require 'functions/side_function.php';
-    require 'view/head.php';
-    require 'view/sidebar_left.php';
+
     if (!isset($_SESSION['GameState'])){
         $_SESSION['GameState'] = 0;
     }
@@ -28,7 +27,8 @@
     }
     array_push($_SESSION['Pathway'],$_SESSION['CurrentPage']);
 
-
+    require 'view/head.php';
+    require 'view/sidebar_left.php';
 ?>
     <div class="content item contentRight">
         <?php
