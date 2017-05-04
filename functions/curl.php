@@ -39,8 +39,40 @@ function GetRandURL(){
     return $url;
 }
 
+function NewPage($url){
+            $pagemodif;
+            $curl=curl_init($url);//initialisation de la session url
+            curl_setopt($curl, CURLOPT_FRESH_CONNECT, true);
+            if (preg_match('`^https://`i', $url))// Ne pas vérifier la validité du certificat SSL
+            {
+                curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, false);
+                curl_setopt($curl, CURLOPT_SSL_VERIFYHOST, 0);
+            }
+            curl_setopt($curl, CURLOPT_FOLLOWLOCATION, true);
+            curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
+
+            $return = curl_exec($curl);
+            curl_close($curl);
+            $pagemodif = strstr ( $return , "<h1 id=\"firstHeading\" class=\"firstHeading\"");
+            $pagemodif = strstr ( $pagemodif , "<div class=\"printfooter\">",true);
+            $pagemodif = $pagemodif.'</div>';
+
+            // Ici nous allons transformer les liens que l'on garde en balise inutile pour ensuite supprimer tout les autres liens
+            // a la fois externes et interne inutile (modifier le code / aide / etc...) puis les remettre de sorte a pouvoir les utiliser
+            $pagemodif = preg_replace('#<a .*?href="/wiki/([^:]*?)".*?>(.*?)</a>#','<evitercasse$1evitercasse$2evitercasse>',$pagemodif);
+            $pagemodif = preg_replace( '#<a [^>]*>(.*?)</a>#','<span class="ancienlien">$1</span>',$pagemodif );
+            $pagemodif = preg_replace('#<evitercasse(.*?)evitercasse(.*?)evitercasse>#','<a href="jeu.php?acces=$1">$2</a>',$pagemodif);
+
+            $pagemodif = preg_replace( '#<span class="mw-editsection">.+<span class="mw-editsection-bracket">]</span></span>#'," ",$pagemodif );
+            return $pagemodif;
+        }
 
 /****************************/
 /*  cURL result treatment   */
 /****************************/
-
+function GetArticle($page) {
+    $dom = new DOMDocument();
+    libxml_use_internal_errors(true);
+    $dom->loadHTML($page);
+    libxml_clear_errors();
+}
