@@ -1,4 +1,4 @@
-<?php
+    <?php
 /****************************/
 /*      cURL Functions      */
 /****************************/
@@ -79,7 +79,7 @@ function GetArticle($page) {
 
 function clear_article($str){
     $len = strpos($str, "<div_class=\"printfooter")-strpos($str, "<div_id=\"mw-content-text");
-$str = substr($str,strpos($str,"<div_id=\"mw-content-text"),$len);
+    $str = substr($str,strpos($str,"<div_id=\"mw-content-text"),$len);
     $str = preg_replace("/<a(.*?)href=\"\/w\/(.*?)<\/a>/","",$str);
     $str=preg_replace("/<a(.*?)href=\"\/wiki\/(.*?)\"(.*?)>(.*?)<\/a>/","<a_$1_href=\"game.php?article=$2\"$3>$4</a>",$str);
     return $str;
