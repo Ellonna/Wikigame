@@ -1,5 +1,7 @@
 <?php
-    session_start();
+    if(!isset($_SESSION)){
+        session_start();
+    }
     require 'functions/curl.php';
     require 'functions/side_function.php';
     require 'view/head.php';
@@ -25,6 +27,8 @@
         $_SESSION['Pathway'] = array();
     }
     array_push($_SESSION['Pathway'],$_SESSION['CurrentPage']);
+
+
 ?>
     <div class="content item contentRight">
         <?php

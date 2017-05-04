@@ -1,7 +1,12 @@
 <?php
-if( ! $_SESSION){
-    session_start();
-}
+
+    libxml_use_internal_errors(true);
+    libxml_clear_errors();
+    if(!isset($_SESSION))
+    {
+        session_start();
+    }
+
 ?>
 <div class="menuLeft item contentLeft">
     <?php
