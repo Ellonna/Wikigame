@@ -7,14 +7,20 @@
     if (!isset($_SESSION['GameState'])){
         $_SESSION['GameState'] = 0;
     }
+    if (!isset($_SESSION['StartPage'])){
+        $_SESSION['StartPage'] = GetRandURL();
+    }
+    if (!isset($_SESSION['EndPage'])){
+        $_SESSION['EndPage'] = GetRandURL();
+    }
 ?>
     <div class="content item contentRight">
         <?php
         switch($_SESSION['GameState']){
             case 0:
-                $StartPage = GetRandURL();
-                $EndPage = GetRandUrl();
-                echo $StartPage, '</br>', $EndPage;
+                $URLpourtester = 'https://fr.wikipedia.org/wiki/Wikip%C3%A9dia';
+                $titre = clear_title($URLpourtester);
+                echo 'Je suis le echo' . $titre;
                 require 'view/StartPage.php';
                 break;
             case 1:
