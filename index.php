@@ -4,11 +4,13 @@
     require 'functions/side_function.php';
     require 'view/head.php';
     require 'view/sidebar_left.php';
-    $GameState = 1;
+    if (!isset($_SESSION['GameState'])){
+        $_SESSION['GameState'] = 0;
+    }
 ?>
     <div class="content item contentRight">
         <?php
-        switch($GameState){
+        switch($_SESSION['GameState']){
             case 0:
                 $StartPage = GetRandURL();
                 $EndPage = GetRandUrl();
@@ -22,8 +24,8 @@
                 echo 'Victory !';
                 break;
             default :
-                echo 'ERROR, wrong value of $GameState';
-                echo '$GameState = '.$GameState;
+                echo 'ERROR, wrong value of GameState';
+                echo 'GameState = '.$_SESSION['GameState'];
         }
         ?>
     </div>
