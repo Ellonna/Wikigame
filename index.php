@@ -8,11 +8,24 @@
         $_SESSION['GameState'] = 0;
     }
     if (!isset($_SESSION['StartPage'])){
-        $_SESSION['StartPage'] = GetRandURL();
+        $_SESSION['StartPage'] = clear_title(GetRandURL());
     }
     if (!isset($_SESSION['EndPage'])){
-        $_SESSION['EndPage'] = GetRandURL();
+        $_SESSION['EndPage'] = clear_title(GetRandURL());
     }
+    if(isset($_GET['article'])){
+        $_SESSION['CurrentPage'] = $_GET['article'];
+    }
+    else {
+        $_SESSION['CurrentPage'] = $_SESSION['StartPage'];
+    }
+    echo $_SESSION['CurrentPage'];
+    echo $_SESSION['StartPage'];
+    if (!isset($_SESSION['Pathway'])){
+        $_SESSION['Pathway'] = array();
+    }
+    array_push($_SESSION['Pathway'],$_SESSION['CurrentPage']);
+
 ?>
     <div class="content item contentRight">
         <?php
