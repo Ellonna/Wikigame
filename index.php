@@ -1,52 +1,37 @@
 <?php
-    if(!isset($_SESSION)){
-        session_start();
-    }
-    require 'functions/curl.php';
-    require 'functions/side_function.php';
-
-    if (!isset($_SESSION['GameState'])){
-        $_SESSION['GameState'] = 0;
-    }
-    if (!isset($_SESSION['StartPage'])){
-        $_SESSION['StartPage'] = clear_title(GetRandURL());
-    }
-    if (!isset($_SESSION['EndPage'])){
-        $_SESSION['EndPage'] = clear_title(GetRandURL());
-    }
-    if(isset($_GET['article'])){
-        $_SESSION['CurrentPage'] = $_GET['article'];
-    }
-    else {
-        $_SESSION['CurrentPage'] = $_SESSION['StartPage'];
-    }
-    echo $_SESSION['CurrentPage'];
-    echo $_SESSION['StartPage'];
-    if (!isset($_SESSION['Pathway'])){
-        $_SESSION['Pathway'] = array();
-    }
-    array_push($_SESSION['Pathway'],$_SESSION['CurrentPage']);
-
-    require 'view/head.php';
-    require 'view/sidebar_left.php';
+if(!isset($_SESSION)){
+    session_start();
+}
+require 'functions/curl.php';
+require 'functions/side_function.php';
+SetSession();
+require 'view/head.php';
+require 'view/sidebar_left.php';
+if($_SESSION['CurrentPage'] == $_SESSION['EndPage']){
+    $_SESSION['GameState'] = 2;
+}
 ?>
-    <div class="content item contentRight">
-        <?php
-        switch($_SESSION['GameState']){
-            case 0:
-                require 'view/StartPage.php';
-                break;
-            case 1:
-                require 'view/article.php';
-                break;
-            case 2:
-                echo 'Victory !';
-                break;
-            default :
-                echo 'ERROR, wrong value of GameState';
-                echo 'GameState = '.$_SESSION['GameState'];
-        }
-        ?>
-    </div>
+</div>
+<div class="content item contentRight">
+    <?php
+    switch($_SESSION['GameState']){
+        case 0:
+            require 'view/StartPage.php';
+            break;
+        case 1:
+            require 'view/article.php';
+            break;
+        case 2:
+            chrono();
+            echo '<h2>Victory !</h2><p>It took you '.$_SESSION['temps'].' seconds.</br>';
+            echo '<p>You clicked '.count($_SESSION['Pathway']).' links.</p>';
+            echo '<form action = "functions/redirect.php" method="get"><input type = "hidden" value = "refresh" name = "RedirPage"><input type = "submit" value = "Restart"></form>';
+            break;
+        default :
+            echo 'ERROR, wrong value of GameState';
+            echo 'GameState = '.$_SESSION['GameState'];
+    }
+    ?>
+</div>
 
 <?php require 'view/footer.php'?>

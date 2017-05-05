@@ -19,15 +19,16 @@
     $second = $time%60;
     $min = ($time-($time%60))/60;
 ?>
-    <div id='min'><?php         echo($min); ?></div><div id='m'>, m </div>
-    <div id='sec'><?php         echo($second) ?></div><div id='s'>, s </div>
-    <div id='mili'><?php         echo("000") ?></div><div id='mil'>, mil </div>
+    <div id = 'chrono'>
+        <div>Time : </div>
+        <div id='min'><?php         echo($min); ?></div><div id='m'>, : </div>
+        <div id='sec'><?php         echo($second) ?></div>
+    </div>
 <script type="text/javascript">
 
 var time='<?php echo $time; ?>';
-var m = " . m . ";
-var s = " . s . ";
-var mil = " . mili  ";
+var m = ":";
+var s = ":";
 var mili = "0";
 
 setInterval(function(){
@@ -41,7 +42,7 @@ var min = (time - time%60)/60;
 
     document.getElementById("min").innerHTML = min;     document.getElementById("m").innerHTML = m;
     document.getElementById("sec").innerHTML = sec;     document.getElementById("s").innerHTML = s;
-    document.getElementById("mili").innerHTML = mili;     document.getElementById("mil").innerHTML = mil;
+    document.getElementById("mili").innerHTML = mili;
 
 },10)
 </script>

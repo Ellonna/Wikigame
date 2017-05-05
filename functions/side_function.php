@@ -1,4 +1,32 @@
 <?php
+function SetSession(){
+    if (!isset($_SESSION['GameState'])){
+        $_SESSION['GameState'] = 0;
+    }
+    if ($_SESSION['GameState'] == 0){
+        init_chrono();
+    }
+    if (!isset($_SESSION['StartPage']) || $_SESSION['GameState'] == 0){
+        $_SESSION['StartPage'] = clear_title(GetRandURL());
+    }
+    if (!isset($_SESSION['EndPage']) || $_SESSION['GameState'] == 0){
+        $_SESSION['EndPage'] = clear_title(GetRandURL());
+    }
+    if(isset($_GET['article']) && $_SESSION['GameState'] == 1){
+        $_SESSION['CurrentPage'] = $_GET['article'];
+        if($_GET['article'] == $_SESSION['EndPage']){
+            $_SESSION['GameState'] = 2;
+        }
+    }
+    else {
+        $_SESSION['CurrentPage'] = $_SESSION['StartPage'];
+    }
+    if (!isset($_SESSION['Pathway']) || $_SESSION['GameState'] == 0){
+        $_SESSION['Pathway'] = array();
+    }
+    array_push($_SESSION['Pathway'],$_SESSION['CurrentPage']);
+}
+
 function chrono (){
     if (!isset($_SESSION['starttime'])) {
         $_SESSION['starttime'] = new DateTime();
