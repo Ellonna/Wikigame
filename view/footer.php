@@ -1,8 +1,9 @@
 <div class="clearb"></div>
-        </div>
+</div>
 
-        <div class="footer item"> HIHIHIIHIHIHI ♥
-        </div>
-    </div>
+<div class="footer item"> HIHIHIIHIHIHI ♥
+</div>
+</div>
 </body>
+
 </html>
