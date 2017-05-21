@@ -10,4 +10,6 @@
 <body>
     <div class="container">
         <div class="header item">The Wiki Game !</div>
+        <div id="denis"></div>
+        <script src="denis.js"></script>
         <div class="contentBody">
