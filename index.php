@@ -10,6 +10,13 @@ require 'view/sidebar_left.php';
 if($_SESSION['CurrentPage'] == $_SESSION['EndPage']){
     $_SESSION['GameState'] = 2;
 }
+if(!isset($bdd)){
+    try {
+        $bdd = new PDO('mysql:host=localhost;dbname=wikigame;charset=utf8', 'root', '');
+    } catch (Exception $e) {
+        die('Erreur : ' . $e->getMessage());
+    }
+}
 ?>
 </div>
 <div class="content item contentRight">
@@ -26,6 +33,12 @@ if($_SESSION['CurrentPage'] == $_SESSION['EndPage']){
             echo '<h2>Victory !</h2><p>It took you '.$_SESSION['temps'].' seconds.</br>';
             echo '<p>You clicked '.count($_SESSION['Pathway']).' links.</p>';
             echo '<form action = "functions/redirect.php" method="get"><input type = "hidden" value = "refresh" name = "RedirPage"><input type = "submit" value = "Restart"></form>';
+            $valscore = Valeurscore(count($_SESSION['Pathway']), $_SESSION['clickmax']);
+            saveScore($_SESSION['Pseudo'], $valscore, $_SESSION['temps']);
+            $reponse = $bdd->query('SELECT * FROM highscore ORDER BY VAL_score, temp DESC');
+            while ($donnees = $reponse->fetch()){
+                echo $donnees['pseudo'] . ' | ' . $donnees['Val_score'] . ' | ' . $donnees['Val_score'] . ' | ' . $donnees['temps'] . '<br />';
+            }
             break;
         default :
             echo 'ERROR, wrong value of GameState';

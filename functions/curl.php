@@ -63,6 +63,38 @@ function clear_article($return){
     return $pagemodif;
 }
 
+function follow_random_link($page){
+    //return substr_count($page, '<a>');
+    $dom = new DOMDocument();
+    libxml_use_internal_errors(true);
+    $dom->loadHTML($page);
+    libxml_clear_errors();
+    $nblinks = 0;
+    $i = 0;
+    $links = $dom->getElementsByTagName('a');
+    foreach ($links as $link) {
+        $nblinks++;
+    }
+    $follow = rand(1, nblinks);
+    foreach ($links as $link){
+        $i++;
+        if ($i == $follow){
+            $curlUrl = 'https://fr.wikipedia.org/wiki/'.$link->nodeValue;
+        }
+    }
+    return $curlUrl;
+}
+
+function nclicks($url, $nbclicks){
+    if($nbclicks == 0) return $url;
+    else {
+        $res = GetWikipage($url);
+        $cleaned = GetArticle(clear_article($res));
+        $newUrl = follow_random_link($cleaned);
+        return nclicks($newUrl, $nbclicks - 1);
+    }
+}
+
 function clear_title($url){
     //on efface le début du lien pour ne garder que le titre de l'article
     $url = preg_replace("/https:\/\/fr.wikipedia.org\/wiki\//","",$url);

@@ -66,3 +66,24 @@ function init_chrono(){
     $_SESSION['currtime'] = new DateTime() ;
     $_SESSION['delta'] = 0;
 }
+
+function Valeurscore($nbclick, $clickminimum){
+    if($clikminimum=0){
+        $Val_score=100-(($nbclick)*2);
+    }
+    else{
+        $Val_score=100-($nbclick-$clickminimum)*5;
+    }
+    return $Val_score;
+}
+
+function saveScore($pseudo, $Val_score, $temps){
+    global $bdd;
+
+    $req = $bdd->prepare('INSERT INTO highscore(pseudo, Val_score, temps) VALUES(:pseudo, :Val_score, :temps)');
+    $req->execute(array(
+        'pseudo' => $pseudo,
+        'Val_score' => $Val_score,
+        'temps' => $temps,
+    ));
+}
